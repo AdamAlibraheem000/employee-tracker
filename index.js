@@ -64,11 +64,25 @@ function departments() {
 
 function roles() {
   // display job title, role ID, department, salary
+  const sql = `SELECT * FROM roles`;
+  db.query(sql, (err, rows) => {
+    if (err) {
+      console.log("error");
+    }
+    console.log(rows);
+  });
 }
 
 function employees() {
   // formatted table displaying:
   // employee id, first name, last name, job title, departments, salaries, & managers
+  const sql = `SELECT * FROM employees`;
+  db.query(sql, (err, rows) => {
+    if (err) {
+      console.log("error");
+    }
+    console.log(rows);
+  });
 }
 
 function addDepartment() {
@@ -90,4 +104,6 @@ function addEmployeeRole() {
 }
 
 // mainMenu();
-departments();
+// departments();
+// roles();
+employees();
