@@ -1,5 +1,6 @@
 const inquirer = require("inquirer");
 const fs = require("fs");
+const db = require("./db/connection");
 
 function mainMenu() {
   return inquirer
@@ -50,6 +51,15 @@ function mainMenu() {
 
 function departments() {
   // formatted table showing department names & ids
+  // DONE
+
+  const sql = `SELECT * FROM department`;
+  db.query(sql, (err, rows) => {
+    if (err) {
+      console.log("error");
+    }
+    console.log(rows);
+  });
 }
 
 function roles() {
@@ -79,4 +89,5 @@ function addEmployeeRole() {
   // prompted to select an employee to update and their new role and this information is updated in the database
 }
 
-mainMenu();
+// mainMenu();
+departments();
