@@ -88,22 +88,192 @@ function employees() {
 function addDepartment() {
   // prompt to add name of department
   // department is added to database
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        message: "Enter new department name: ",
+        name: "newDep",
+        validate: (newDepVal) => {
+          if (newDepVal) {
+            return true;
+          } else {
+            console.log("Input required!");
+            return false;
+          }
+        },
+      },
+    ])
+    .then((answer) => {
+      console.log(answer.newDep);
+    });
 }
 
 function addRole() {
   // prompt to enter name, salary, & department for role
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        message: "Enter employee name: ",
+        name: "newName",
+        validate: (newNameVal) => {
+          if (newNameVal) {
+            return true;
+          } else {
+            console.log("Input required!");
+            return false;
+          }
+        },
+      },
+      {
+        type: "input",
+        message: "Enter salary: ",
+        name: "newSalary",
+        validate: (newSalaryVal) => {
+          if (newSalaryVal) {
+            return true;
+          } else {
+            console.log("Input required!");
+            return false;
+          }
+        },
+      },
+      {
+        type: "input",
+        message: "Enter department: ",
+        name: "newDepRole",
+        validate: (newDepRoleVal) => {
+          if (newDepRoleVal) {
+            return true;
+          } else {
+            console.log("Input required!");
+            return false;
+          }
+        },
+      },
+    ])
+    .then((roleAnswers) => {
+      console.log(roleAnswers.newName);
+      console.log(roleAnswers.newSalary);
+      console.log(roleAnswers.newDepRole);
+    });
   // role is added to database
 }
 
 function addEmployee() {
   // prompt enter the employee’s first name, last name, role, and manager, and that employee is added to the database.
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        message: "Enter employee first name: ",
+        name: "firstName",
+        validate: (firstNameVal) => {
+          if (firstNameVal) {
+            return true;
+          } else {
+            console.log("Input required!");
+            return false;
+          }
+        },
+      },
+      {
+        type: "input",
+        message: "Enter employee last name: ",
+        name: "lastName",
+        validate: (lastNameVal) => {
+          if (lastNameVal) {
+            return true;
+          } else {
+            console.log("Input required!");
+            return false;
+          }
+        },
+      },
+      {
+        type: "input",
+        message: "Enter employee role: ",
+        name: "empRole",
+        validate: (empRoleVal) => {
+          if (empRoleVal) {
+            return true;
+          } else {
+            console.log("Input required!");
+            return false;
+          }
+        },
+      },
+      {
+        type: "input",
+        message: "Enter employee's manager: ",
+        name: "empManager",
+        validate: (empManagerVal) => {
+          if (empManagerVal) {
+            return true;
+          } else {
+            console.log("Input required!");
+            return false;
+          }
+        },
+      },
+    ])
+    .then((empAnswers) => {
+      console.log(empAnswers.firstName);
+      console.log(empAnswers.lastName);
+      console.log(empAnswers.empRole);
+      console.log(empAnswers.empManager);
+    });
 }
 
 function addEmployeeRole() {
   // prompted to select an employee to update and their new role and this information is updated in the database
+
+  // SQL command to display all employees
+
+  // prompts to choose emp & role
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        message: "Choose employee to update: ",
+        name: "empUpdate",
+        validate: (empUpdateVal) => {
+          if (empUpdateVal) {
+            return true;
+          } else {
+            console.log("Input required!");
+            return false;
+          }
+        },
+      },
+      {
+        type: "input",
+        message: "Enter new role for employee: ",
+        name: "empUpdateRole",
+        validate: (updateRoleVal) => {
+          if (updateRoleVal) {
+            return true;
+          } else {
+            console.log("Input required!");
+            return false;
+          }
+        },
+      },
+    ])
+    .then((updateAnswers) => {
+      console.log(updateAnswers.empUpdate);
+      console.log(updateAnswers.empUpdateRole);
+    });
+
+  // SQL to update database
 }
 
 // mainMenu();
 // departments();
 // roles();
-employees();
+// employees();
+// addDepartment();
+// addRole();
+// addEmployee();
+addEmployeeRole();
