@@ -106,6 +106,14 @@ function addDepartment() {
     ])
     .then((answer) => {
       console.log(answer.newDep);
+      const addDeprt = answer.newDep;
+      const sql = `INSERT INTO department(d_name) VALUES ("${addDeprt}")`;
+      db.query(sql, (err, row) => {
+        if (err) {
+          console.log("error");
+        }
+        console.log(addDeprt + " was added");
+      });
     });
 }
 
@@ -141,7 +149,7 @@ function addRole() {
       },
       {
         type: "input",
-        message: "Enter department: ",
+        message: "Enter department number: ",
         name: "newDepRole",
         validate: (newDepRoleVal) => {
           if (newDepRoleVal) {
@@ -157,6 +165,19 @@ function addRole() {
       console.log(roleAnswers.newName);
       console.log(roleAnswers.newSalary);
       console.log(roleAnswers.newDepRole);
+      const addName = roleAnswers.newName;
+      const addSalary = roleAnswers.newSalary;
+      const addDepRole = roleAnswers.newDepRole;
+      const sql = `INSERT INTO roles(title, salary, department_id) VALUES 
+      ("${addName}", "${addSalary}", "${addDepRole}")`;
+      db.query(sql, (err, row) => {
+        if (err) {
+          console.log("error");
+        }
+        console.log(
+          addName + " " + addSalary + " " + addDepRole + " was added"
+        );
+      });
     });
   // role is added to database
 }
@@ -274,6 +295,6 @@ function addEmployeeRole() {
 // roles();
 // employees();
 // addDepartment();
-// addRole();
+addRole();
 // addEmployee();
-addEmployeeRole();
+// addEmployeeRole();
