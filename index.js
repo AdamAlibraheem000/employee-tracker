@@ -214,7 +214,7 @@ function addEmployee() {
       },
       {
         type: "input",
-        message: "Enter employee role: ",
+        message: "Enter employee role number: ",
         name: "empRole",
         validate: (empRoleVal) => {
           if (empRoleVal) {
@@ -240,10 +240,24 @@ function addEmployee() {
       },
     ])
     .then((empAnswers) => {
-      console.log(empAnswers.firstName);
-      console.log(empAnswers.lastName);
-      console.log(empAnswers.empRole);
-      console.log(empAnswers.empManager);
+      // console.log(empAnswers.firstName);
+      // console.log(empAnswers.lastName);
+      // console.log(empAnswers.empRole);
+      // console.log(empAnswers.empManager);
+      const addFirstName = empAnswers.firstName;
+      const addLastName = empAnswers.lastName;
+      const addEmpRole = empAnswers.empRole;
+      const addEmpManager = empAnswers.empManager; //Manager???
+      const sql = `INSERT INTO employees(first_name, last_name, role_id) VALUES 
+      ("${addFirstName}", "${addLastName}", "${addEmpRole}")`;
+      db.query(sql, (err, row) => {
+        if (err) {
+          console.log("error");
+        }
+        console.log(
+          addFirstName + " " + addLastName + " " + addEmpRole + " was added"
+        );
+      });
     });
 }
 
@@ -251,6 +265,7 @@ function addEmployeeRole() {
   // prompted to select an employee to update and their new role and this information is updated in the database
 
   // SQL command to display all employees
+  const sqlDisplay = `SELECT * FROM `;
 
   // prompts to choose emp & role
   inquirer
@@ -295,6 +310,6 @@ function addEmployeeRole() {
 // roles();
 // employees();
 // addDepartment();
-addRole();
+// addRole();
 // addEmployee();
-// addEmployeeRole();
+addEmployeeRole();
