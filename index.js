@@ -1,11 +1,11 @@
 const inquirer = require("inquirer");
-const fs = require("fs");
 const db = require("./db/connection");
 
 function mainMenu() {
-  return inquirer
+  inquirer
     .prompt([
       {
+        //Add quit program option
         type: "list",
         name: "main",
         message: "Choose from the following options",
@@ -17,13 +17,15 @@ function mainMenu() {
           "Add a role",
           "Add an employee",
           "Update employee role",
+          "Quit Program",
         ],
       },
     ])
+
     .then((choice) => {
       switch (choice.main) {
         case "View all departments":
-          console.log("departments");
+          departments();
           break;
         case "View all roles":
           console.log("roles");
@@ -43,8 +45,10 @@ function mainMenu() {
         case "Update employee role":
           console.log("Update employee role");
           break;
-        default:
-          console.log("Wrong input. Try again");
+        case "Quit Program":
+          console.log("Quit Program");
+          process.exit(0);
+          break;
       }
     });
 }
@@ -58,8 +62,12 @@ function departments() {
     if (err) {
       console.log("error");
     }
+    console.log("\n\n*********DEPARTMENTS**********");
     console.log(rows);
+    console.log("\n\n");
   });
+
+  mainMenu();
 }
 
 function roles() {
@@ -119,7 +127,7 @@ function addDepartment() {
 
 function addRole() {
   // prompt to enter name, salary, & department for role
-  inquirer
+  inquirer //Drop down for role
     .prompt([
       {
         type: "input",
@@ -183,7 +191,7 @@ function addRole() {
 }
 
 function addEmployee() {
-  // prompt enter the employee’s first name, last name, role, and manager, and that employee is added to the database.
+  // prompt enter the employee’s first name, last name, role, and manager, and that employee is added to the database.   //Drop down for role & manager
   inquirer
     .prompt([
       {
@@ -305,11 +313,11 @@ function addEmployeeRole() {
   // SQL to update database
 }
 
-// mainMenu();
+mainMenu();
 // departments();
 // roles();
 // employees();
 // addDepartment();
 // addRole();
 // addEmployee();
-addEmployeeRole();
+// addEmployeeRole();
