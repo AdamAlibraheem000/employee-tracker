@@ -28,22 +28,22 @@ function mainMenu() {
           departments();
           break;
         case "View all roles":
-          console.log("roles");
+          roles();
           break;
         case "View all employees":
-          console.log("employees");
+          employees();
           break;
         case "Add a department":
-          console.log("Add a department");
+          addDepartment();
           break;
         case "Add a role":
-          console.log("Add a role");
+          addRole();
           break;
         case "Add an employee":
-          console.log("Add an employee");
+          addEmployee();
           break;
         case "Update employee role":
-          console.log("Update employee role");
+          updateEmployeeRole();
           break;
         case "Quit Program":
           console.log("Quit Program");
@@ -65,9 +65,8 @@ function departments() {
     console.log("\n\n*********DEPARTMENTS**********");
     console.log(rows);
     console.log("\n\n");
+    mainMenu();
   });
-
-  mainMenu();
 }
 
 function roles() {
@@ -77,7 +76,10 @@ function roles() {
     if (err) {
       console.log("error");
     }
+    console.log("\n\n*********ROLES**********");
     console.log(rows);
+    console.log("\n\n");
+    mainMenu();
   });
 }
 
@@ -89,7 +91,10 @@ function employees() {
     if (err) {
       console.log("error");
     }
+    console.log("\n\n*********EMPLOYEES TABLE**********");
     console.log(rows);
+    console.log("\n\n");
+    mainMenu();
   });
 }
 
@@ -113,14 +118,18 @@ function addDepartment() {
       },
     ])
     .then((answer) => {
-      console.log(answer.newDep);
       const addDeprt = answer.newDep;
       const sql = `INSERT INTO department(d_name) VALUES ("${addDeprt}")`;
       db.query(sql, (err, row) => {
         if (err) {
           console.log("error");
+          console.log("\n\n");
+          mainMenu();
+        } else {
+          console.log(addDeprt + " was added");
+          console.log("\n\n");
+          mainMenu();
         }
-        console.log(addDeprt + " was added");
       });
     });
 }
@@ -131,7 +140,7 @@ function addRole() {
     .prompt([
       {
         type: "input",
-        message: "Enter employee name: ",
+        message: "Enter new role: ",
         name: "newName",
         validate: (newNameVal) => {
           if (newNameVal) {
@@ -144,7 +153,7 @@ function addRole() {
       },
       {
         type: "input",
-        message: "Enter salary: ",
+        message: "Enter salary for role: ",
         name: "newSalary",
         validate: (newSalaryVal) => {
           if (newSalaryVal) {
@@ -156,20 +165,27 @@ function addRole() {
         },
       },
       {
-        type: "input",
-        message: "Enter department number: ",
+        type: "list",
+        message: "Choose department for role: ",
         name: "newDepRole",
-        validate: (newDepRoleVal) => {
-          if (newDepRoleVal) {
-            return true;
-          } else {
-            console.log("Input required!");
-            return false;
-          }
-        },
+        choices: ["Accounting", "Marketing", "Finance", "Human Resources"],
       },
     ])
     .then((roleAnswers) => {
+      switch (roleAnswers.newDepRole) {
+        case "Accounting":
+          roleAnswers.newDepRole = 1;
+          break;
+        case "Marketing":
+          roleAnswers.newDepRole = 2;
+          break;
+        case "Finance":
+          roleAnswers.newDepRole = 3;
+          break;
+        case "Human Resources":
+          roleAnswers.newDepRole = 4;
+          break;
+      }
       console.log(roleAnswers.newName);
       console.log(roleAnswers.newSalary);
       console.log(roleAnswers.newDepRole);
@@ -177,14 +193,19 @@ function addRole() {
       const addSalary = roleAnswers.newSalary;
       const addDepRole = roleAnswers.newDepRole;
       const sql = `INSERT INTO roles(title, salary, department_id) VALUES 
-      ("${addName}", "${addSalary}", "${addDepRole}")`;
-      db.query(sql, (err, row) => {
+      (?,?,?)`;
+      const params = [addName, addSalary, addDepRole];
+      db.query(sql, params, (err, row) => {
         if (err) {
           console.log("error");
+          console.log("\n\n");
+          mainMenu();
+        } else {
+          console.log(
+            addName + " " + addSalary + " " + addDepRole + " was added"
+          );
+          mainMenu();
         }
-        console.log(
-          addName + " " + addSalary + " " + addDepRole + " was added"
-        );
       });
     });
   // role is added to database
@@ -261,19 +282,26 @@ function addEmployee() {
       db.query(sql, (err, row) => {
         if (err) {
           console.log("error");
+          console.log("\n\n");
+          mainMenu();
+        } else {
+          console.log(
+            addFirstName + " " + addLastName + " " + addEmpRole + " was added"
+          );
+
+          console.log("\n\n");
+          mainMenu();
         }
-        console.log(
-          addFirstName + " " + addLastName + " " + addEmpRole + " was added"
-        );
       });
     });
 }
 
-function addEmployeeRole() {
+function updateEmployeeRole() {
   // prompted to select an employee to update and their new role and this information is updated in the database
 
   // SQL command to display all employees
-  const sqlDisplay = `SELECT * FROM `;
+  const sqlDisplay = `SELECT * FROM employees`;
+  console.log(sqlDisplay);
 
   // prompts to choose emp & role
   inquirer

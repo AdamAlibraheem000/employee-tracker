@@ -2,7 +2,7 @@ INSERT INTO department(d_name)
 VALUES ("accounting"),
 ("marketing"),
 ("Finance"),
-("beer drinkin");
+("Sales");
 
 INSERT INTO roles(title, salary, department_id) 
 VALUES ("Lead Beefcakes",45000, 1),
