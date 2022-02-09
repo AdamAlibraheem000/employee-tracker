@@ -241,52 +241,75 @@ function addEmployee() {
           }
         },
       },
+
       {
-        type: "input",
-        message: "Enter employee role number: ",
-        name: "empRole",
-        validate: (empRoleVal) => {
-          if (empRoleVal) {
-            return true;
-          } else {
-            console.log("Input required!");
-            return false;
-          }
-        },
+        type: "list",
+        message: "Choose role for new Employee: ",
+        name: "newRole",
+        choices: ["Accounting", "Marketing", "Finance", "Human Resources"],
       },
+
       {
-        type: "input",
+        type: "list",
         message: "Enter employee's manager: ",
-        name: "empManager",
-        validate: (empManagerVal) => {
-          if (empManagerVal) {
-            return true;
-          } else {
-            console.log("Input required!");
-            return false;
-          }
-        },
+        name: "newEmpManager",
+        choices: ["Micheal", "Sarah", "Rene", "Samuel"],
       },
     ])
     .then((empAnswers) => {
-      // console.log(empAnswers.firstName);
-      // console.log(empAnswers.lastName);
-      // console.log(empAnswers.empRole);
-      // console.log(empAnswers.empManager);
       const addFirstName = empAnswers.firstName;
       const addLastName = empAnswers.lastName;
-      const addEmpRole = empAnswers.empRole;
-      const addEmpManager = empAnswers.empManager; //Manager???
-      const sql = `INSERT INTO employees(first_name, last_name, role_id) VALUES 
-      ("${addFirstName}", "${addLastName}", "${addEmpRole}")`;
-      db.query(sql, (err, row) => {
+      let addEmpRole = 0;
+      let addEmpManager = 0;
+
+      switch (empAnswers.newRole) {
+        case "Accounting":
+          addEmpRole = 1;
+          break;
+        case "Marketing":
+          addEmpRole = 2;
+          break;
+        case "Finance":
+          addEmpRole = 3;
+          break;
+        case "Human Resources":
+          addEmpRole = 4;
+          break;
+      }
+
+      switch (empAnswers.newEmpManager) {
+        case "Micheal":
+          addEmpManager = 1;
+          break;
+        case "Sarah":
+          addEmpManager = 2;
+          break;
+        case "Rene":
+          addEmpManager = 3;
+          break;
+        case "Samuel":
+          addEmpManager = 4;
+          break;
+      }
+
+      const sql = `INSERT INTO employees(first_name, last_name, role_id, manager_id) VALUES 
+      (?,?,?,?)`;
+      const input = [addFirstName, addLastName, addEmpRole, addEmpManager];
+      db.query(sql, input, (err, row) => {
         if (err) {
           console.log("error");
           console.log("\n\n");
           mainMenu();
         } else {
           console.log(
-            addFirstName + " " + addLastName + " " + addEmpRole + " was added"
+            addFirstName +
+              " " +
+              addLastName +
+              " " +
+              addEmpRole +
+              " " +
+              addEmpManager +
+              " was added"
           );
 
           console.log("\n\n");
