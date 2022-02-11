@@ -1,5 +1,9 @@
 const inquirer = require("inquirer");
 const db = require("./db/connection");
+require("console.table");
+db.connect(function () {
+  mainMenu();
+});
 
 function mainMenu() {
   inquirer
@@ -63,7 +67,7 @@ function departments() {
       console.log("error");
     }
     console.log("\n\n*********DEPARTMENTS**********");
-    console.log(rows);
+    console.table(rows);
     console.log("\n\n");
     mainMenu();
   });
@@ -77,7 +81,7 @@ function roles() {
       console.log("error");
     }
     console.log("\n\n*********ROLES**********");
-    console.log(rows);
+    console.table(rows);
     console.log("\n\n");
     mainMenu();
   });
@@ -92,7 +96,7 @@ function employees() {
       console.log("error");
     }
     console.log("\n\n*********EMPLOYEES TABLE**********");
-    console.log(rows);
+    console.table(rows);
     console.log("\n\n");
     mainMenu();
   });
@@ -323,48 +327,80 @@ function updateEmployeeRole() {
   // prompted to select an employee to update and their new role and this information is updated in the database
 
   // SQL command to display all employees
-  const sqlDisplay = `SELECT * FROM employees`;
-  console.log(sqlDisplay);
+  const sqlDisplay = "SELECT * FROM employees;";
 
+  const statement = db.query(sqlDisplay, (err, row) => {
+    console.table(row);
+    if (err) {
+      console.log("error");
+      console.log("\n\n");
+      // mainMenu();
+    } else {
+      console.log("\n\n");
+    }
+    inquirer
+      .prompt([
+        {
+          type: "input",
+          message: "Enter Employee ID to update role: ",
+          name: "empIDUpdate",
+          validate: (empUpdateVal) => {
+            if (empUpdateVal) {
+              return true;
+            } else {
+              console.log("Input required!");
+              return false;
+            }
+          },
+        },
+        {
+          type: "input",
+          message: "Enter new role for employee: ",
+          name: "empUpdateRole",
+          validate: (updateRoleVal) => {
+            if (updateRoleVal) {
+              return true;
+            } else {
+              console.log("Input required!");
+              return false;
+            }
+          },
+        },
+      ])
+      .then((updateAnswers) => {
+        // console.log(updateAnswers.empIDUpdate);
+        // console.log(updateAnswers.empUpdateRole);
+        // console.table(row);
+        const idUpdate = updateAnswers.empIDUpdate;
+        const updatedRole = updateAnswers.empUpdateRole;
+
+        console.log(typeof idUpdate);
+        console.log(typeof updatedRole);
+
+        const sql = `UPDATE employees SET role_id = ${updatedRole} WHERE id = ${idUpdate} `;
+        // let params = [idUpdate, updatedRole];
+        // const displaySQL2 = `SELECT * FROM employees`;
+
+        db.query(sql, (err, result) => {
+          if (err) {
+            console.log("error");
+            console.log("\n\n");
+            // mainMenu();
+          } else {
+            console.log("Employee role successfully updated!");
+
+            employees();
+          }
+        });
+      });
+  });
+  console.log(statement.sql);
   // prompts to choose emp & role
-  inquirer
-    .prompt([
-      {
-        type: "input",
-        message: "Choose employee to update: ",
-        name: "empUpdate",
-        validate: (empUpdateVal) => {
-          if (empUpdateVal) {
-            return true;
-          } else {
-            console.log("Input required!");
-            return false;
-          }
-        },
-      },
-      {
-        type: "input",
-        message: "Enter new role for employee: ",
-        name: "empUpdateRole",
-        validate: (updateRoleVal) => {
-          if (updateRoleVal) {
-            return true;
-          } else {
-            console.log("Input required!");
-            return false;
-          }
-        },
-      },
-    ])
-    .then((updateAnswers) => {
-      console.log(updateAnswers.empUpdate);
-      console.log(updateAnswers.empUpdateRole);
-    });
 
   // SQL to update database
 }
 
-mainMenu();
+// mainMenu();
 // departments();
 // roles();
 // employees();
